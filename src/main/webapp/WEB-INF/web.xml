@@ -1,0 +1,43 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>Archetype Created Web Application</display-name>
+
+  <welcome-file-list>
+    <!-- 设置默认访问的页面 aaa找不到或不存在就会去找index.jsp -->
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
+
+  <!-- 配置SpringMVC前端控制器 -->
+  <servlet>
+    <servlet-name>springmvc-dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!-- 指定Spring配置文件 -->
+    <!-- Spring的配置文件的默认路径是/WEB-INF/${servlet-name}-servlet.xml -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <!-- 将三个Spring配置文件整合到一起，这样三个spring配置文件也能相互读取到彼此内的东西 -->
+      <param-value>classpath*:spring-*.xml</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springmvc-dispatcher</servlet-name>
+    <!-- 指定匹配规则，默认将所有url请求都会转入到DispatcherServlet中去处理， 在spring-web中已经过滤掉一些请求了，因此这里可以直接这样配（默认匹配所有请求） -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!--配置log4j监听器      log4j 这个方法已经废弃，在spring 5.0版本以上建议用log4j2  现在版本4.3-->
+  <listener>
+    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+  </listener>
+  <!-- log4j文件的加载路径：不过我后来又尝试了一下，好像<context-param>不需要进行配置也可以运行log4j。-->
+  <!-- log4j日志输出 -->
+  <context-param>
+    <param-name>log4jConfigLocation</param-name>
+    <param-value>classpath:log4j.properties</param-value>
+  </context-param>
+</web-app>

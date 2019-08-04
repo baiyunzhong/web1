@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper为映射的根节点，
+    namespace指定Dao接口的完整类名mybatis会依据这个接口动态创建一个实现类去实现这个接口，
+    而这个实现类是一个Mapper对象-->
+<!--id ="接口中的方法名"
+　　      parameterType="传入的参数类型"
+　　      resultType = "返回实体类对象，使用包.类名"-->
+<!--namespace 命名空间：与接口进行绑定，该接口的方法对应着mapper中的sql
+    resultMap   -->
+<mapper namespace="com.jnshu.ssm.dao.StudentMapper">
+    <resultMap id="studentMap" type="com.jnshu.ssm.pojo.Student">
+        <result column="id" property="ID" />
+        <result column="online_id" property="onlineId" />
+        <result column="enter_date" property="enterDate" />
+        <result column="daily_Links" property="dailyLinks" />
+        <result column="create_at" property="createAt" />
+        <result column="update_at" property="updateAt" />
+    </resultMap>
+    <select id="findById" parameterType="Integer" resultMap="studentMap">
+        select * from regist where id = #{id}
+    </select>
+
+    <select id="findByName" parameterType="String" resultMap="studentMap">
+        select * from regist where name like #{name}
+    </select>
+
+    <select id="findByOnlineId" parameterType="String" resultMap="studentMap">
+        select * from regist where online_id like #{onlineId}
+    </select>
+
+    <select id="findAll" resultMap="studentMap">
+        select * from regist;
+    </select>
+
+    <select id="findCount" resultType="Integer">
+        select count(id) totalCount from regist;
+    </select>
+    <select id="findByPage" parameterType="com.jnshu.ssm.pojo.Page" resultMap="studentMap">
+        select * from regist order by id limit #{start},#{count};
+    </select>
+    <insert id="add"  parameterType="com.jnshu.ssm.pojo.Student" useGeneratedKeys="true" keyProperty="ID" keyColumn="id">
+        insert into regist(online_id,name,qq,carrer,school,daily_links,slogan,senior,source,enter_date,create_at)
+        values (  #{onlineId}, #{name}, #{qq}, #{carrer}, #{school}, #{dailyLinks}, #{slogan}, #{senior}, #{source}, #{enterDate}, #{createAt});
+    </insert>
+    <update id="update" parameterType="com.jnshu.ssm.pojo.Student">
+        update regist
+        <set>
+            <if test= "onlineId!=null">
+                online_id=#{onlineId},
+            </if>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="qq!=null">
+                qq=#{qq},
+            </if>
+            <if test="carrer!=null">
+                carrer=#{carrer},
+            </if>
+            <if test="enterDate!=null">
+                enter_date=#{enterDate},
+            </if>
+            <if test="school!=null">
+                school=#{school},
+            </if>
+            <if test="dailyLinks!=null">
+                daily_links=#{dailyLinks},
+            </if>
+            <if test="slogan!=null">
+                slogan=#{slogan},
+            </if>
+            <if test="senior!=null">
+                senior=#{senior},
+            </if>
+            <if test="source!=null">
+                source=#{source},
+            </if>
+            <if test="updateAt!=null">
+                update_at=#{updateAt}
+            </if>
+        </set>
+        where id = #{ID};
+    </update>
+
+    <update id="updateByOnlineId" parameterType="com.jnshu.ssm.pojo.Student">
+        update regist
+        <set>
+
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="qq!=null">
+                qq=#{qq},
+            </if>
+            <if test="carrer!=null">
+                carrer=#{carrer},
+            </if>
+            <if test="enterDate!=null">
+                enter_date=#{enterDate},
+            </if>
+            <if test="school!=null">
+                school=#{school},
+            </if>
+            <if test="dailyLinks!=null">
+                daily_links=#{dailyLinks},
+            </if>
+            <if test="slogan!=null">
+                slogan=#{slogan},
+            </if>
+            <if test="senior!=null">
+                senior=#{senior},
+            </if>
+            <if test="source!=null">
+                source=#{source},
+            </if>
+            <if test="updateAt!=null">
+                update_at=#{updateAt}
+            </if>
+        </set>
+        where online_id = #{onlineId};
+    </update>
+    <delete id="delete" parameterType="Integer">
+        delete from regist where id = #{ID};
+    </delete>
+
+    <delete id="deleteByOnlineId" parameterType="String">
+        delete from regist where online_id = #{onlineId};
+    </delete>
+</mapper>
