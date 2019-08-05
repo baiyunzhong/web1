@@ -8,11 +8,36 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+
+
+    <!--注册验证器validator-->
+    <mvc:annotation-driven validator="validator"/>
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+    <!-- 校验错误信息配置文件  国际化配置-->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <!-- 资源文件名 -->
+        <property name="basename" value="classpath:ValidationMessages"/>
+        <!--设置“useCodeAsDefaultMessage”，默认为false，
+        当Spring在ResourceBundle中找不到messageKey的话，就抛出NoSuchMessageException，  
+        把它设置为True，则找不到不会抛出异常，而是使用messageKey作为返回值。-->
+        <property name="useCodeAsDefaultMessage" value="true"/>
+        <!-- 对资源文件内容缓存时间，单位秒 -->
+        <property name="fileEncodings" value="UTF-8"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="120"/>
+    </bean>
+
+
     <!-- 使用注解的包，包括子集 -->
     <context:component-scan base-package="com.jnshu.ssm.controller"/>
 
     <!-- 注册HandlerMapper、HandlerAdapter两个映射类，启用注解的方式指定url与Controller的映射 -->
     <mvc:annotation-driven />
+
 
     <!-- 默认的消息转换器，Controller的方法如果返回特殊对象， 将会执行该消息转换器，通过jackson相关jar包转成json字符串输出给客户端 -->
     <mvc:annotation-driven>
@@ -34,4 +59,7 @@
    <!-- 注册控制器-->
     <!--<bean id="/web1" class="com.jnshu.ssm.controller.StudentController"></bean>-->
     <mvc:default-servlet-handler/>
+
+
+
 </beans>

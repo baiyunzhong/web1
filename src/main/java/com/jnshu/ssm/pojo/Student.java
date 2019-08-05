@@ -1,5 +1,7 @@
 package com.jnshu.ssm.pojo;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -10,7 +12,10 @@ import java.util.Date;
 public class Student {
         //主键ID
         private Integer ID;
+        @NotNull(message="{stu.notnull}")
         private String onlineId;
+        @NotNull(message="{stu.notnull}")
+        @Size(min=2,max=20,message="{stu.sizelimit}")
         private String name;
         private String qq;
         private String carrer;

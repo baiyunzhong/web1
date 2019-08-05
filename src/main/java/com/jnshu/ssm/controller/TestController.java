@@ -5,12 +5,12 @@ import com.jnshu.ssm.service.StudentService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,4 +57,32 @@ public class TestController {
         LOGGER.info("得到的参数students:"+students);
         return students;
     }
+
+    /*获得保存学生信息*/
+    @RequestMapping(value ="/POST/student",method = RequestMethod.GET)
+    public ModelAndView saveStudent( ModelAndView mv,@Valid Student student,BindingResult result) {
+        if(result.hasErrors()){
+            mv.setViewName("error");
+            LOGGER.info("输入参数不合规范"+result.getFieldError().getDefaultMessage());
+            LOGGER.info("输入参数不合规范"+result.getFieldError());
+        } else {
+            mv.addObject("student",student);
+            mv.setViewName("index");
+        }
+        return mv;
+
+    }
+
+    @RequestMapping("/getStudent.do")
+    @ResponseBody
+    public Student getStudent(@Valid Student student,BindingResult result){
+        if(result.hasErrors()){
+            LOGGER.info("输入参数不合规范"+result.getFieldError());
+        } else {
+            LOGGER.info("得到的参数student:"+student);
+
+        }
+        return student;
+    }
+
 }

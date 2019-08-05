@@ -54,8 +54,6 @@
         <property name="basePackage" value="com.jnshu.ssm.dao"></property>
     </bean>
 
-
-
 </beans>
 
 
