@@ -4,9 +4,11 @@ import com.jnshu.ssm.pojo.Student;
 import com.jnshu.ssm.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -45,33 +47,46 @@ public class StudentController {
     }
     /*获得保存学生信息*/
     @RequestMapping(value ="/POST/student")
-    public ModelAndView saveStudent(ModelAndView mv ,Student student){
-        //设置创立时间
-        student.setCreateAt(System.currentTimeMillis());
-        //把数据保存
-        Integer row = studentService.addOne(student);
-        if(row>=0){
-            mv.addObject("postMsg","保存成功");
-            LOGGER.info("信息保存成功！");
+    public ModelAndView saveStudent(ModelAndView mv , @Valid Student student, BindingResult result){
+        if(result.hasErrors()){
+            mv.addObject("errorMsg",result.getFieldError().getDefaultMessage());
+            mv.setViewName("error");
+            LOGGER.info("参数错误："+result.getFieldError().getDefaultMessage());
         } else {
-            mv.addObject("postMsg","保存失败");
-            LOGGER.info("信息保存失败！信息为："+student);
+            //设置创立时间
+            student.setCreateAt(System.currentTimeMillis());
+            //把数据保存
+            Integer row = studentService.addOne(student);
+            if(row>=0){
+                mv.addObject("postMsg","保存成功");
+                LOGGER.info("信息保存成功！");
+            } else {
+                mv.addObject("postMsg","保存失败");
+                LOGGER.info("信息保存失败！信息为："+student);
+            }
+            mv.setViewName("index");
         }
-        mv.setViewName("index");
+
         return mv;
     }
     /*获得修改学生信息*/
     @RequestMapping(value ="/UPDATE/student")
-    public ModelAndView updateStudent(ModelAndView mv ,Student student){
-        boolean flag = studentService.updateOne(student);
-        if(flag){
-            mv.addObject("updateMsg","修改成功");
-            LOGGER.info("信息修改成功！");
+    public ModelAndView updateStudent(ModelAndView mv ,@Valid Student student, BindingResult result){
+        if(result.hasErrors()){
+            mv.addObject("errorMsg",result.getFieldError().getDefaultMessage());
+            mv.setViewName("error");
+            LOGGER.info("参数错误："+result.getFieldError().getDefaultMessage());
         } else {
-            mv.addObject("updateMsg","修改失败");
-            LOGGER.info("信息修改失败！信息为："+student);
+            boolean flag = studentService.updateOne(student);
+            if(flag){
+                mv.addObject("updateMsg","修改成功");
+                LOGGER.info("信息修改成功！");
+            } else {
+                mv.addObject("updateMsg","修改失败");
+                LOGGER.info("信息修改失败！信息为："+student);
+            }
+            mv.setViewName("index");
         }
-        mv.setViewName("index");
         return mv;
     }
     /*删除学生信息*/
@@ -98,8 +113,11 @@ public class StudentController {
         //查询数据总条数
         Integer totalCount = studentService.totalCount();
         page.setTotalCount(totalCount);
+        LOGGER.info("数据总数:"+totalCount);
         //计算总页数    ceil向上取整
-        int pageCount = (int) Math.ceil(totalCount/10);
+        LOGGER.info("总页数数double类型:"+ Math.ceil(totalCount/10.0));
+        int pageCount = (int) Math.ceil(totalCount/10.0);
+        LOGGER.info("总页数数:"+pageCount);
         page.setPageCount(pageCount);
         //对当前页数做判断
         if(currentPage<=0){

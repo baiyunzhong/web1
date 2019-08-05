@@ -165,6 +165,12 @@
 
     <!-- json-lib -->
     <dependency>
+      <groupId>atg.taglib.json</groupId>
+      <artifactId>json-taglib</artifactId>
+      <version>0.4.1</version>
+    </dependency>
+
+    <dependency>
       <groupId>net.sf.json-lib</groupId>
       <artifactId>json-lib-ext-spring</artifactId>
       <version>${jsonlib.version}</version>
@@ -184,6 +190,13 @@
 
   </dependencies>
 
+  <repositories>
+    <repository>
+      <id>java.net</id>
+      <url>http://maven.jahia.org/maven2</url>
+    </repository>
+  </repositories>
+
   <build>
     <!--注意,如果将静态资源放在src/main/java中,那么编译时将被maven忽略,在target目录下将没有这些资源,此处,我们将
        mybatis的mapper.xml放在了dal包中,方便编程查看,所以需要将该目录添加为资源目录.
@@ -195,6 +208,7 @@
           <include>**/*.xml</include>
         </includes>
       </resource>
+
     </resources>
 
     <finalName>web1</finalName>

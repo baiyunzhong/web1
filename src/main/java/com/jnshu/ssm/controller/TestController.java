@@ -26,6 +26,7 @@ public class TestController {
     public static final Logger LOGGER = Logger.getLogger("TestController");
     @Autowired
     private StudentService studentService;
+    /*JSON*/
     @RequestMapping("/getStudent1.do")
     @ResponseBody
     public JSONObject getStudent(){
@@ -40,6 +41,7 @@ public class TestController {
         LOGGER.info("得到的参数object:"+object);
         return object;
     }
+    /*JSON*/
     @RequestMapping("/getStudent2.do")
     @ResponseBody
     public JSONObject getStudent2(){
@@ -50,6 +52,7 @@ public class TestController {
         LOGGER.info("得到的参数object:"+object);
         return object;
     }
+    /*JSON*/
     @RequestMapping("/getStudents.do")
     @ResponseBody
     public List<Student> getStudents(){
@@ -57,8 +60,15 @@ public class TestController {
         LOGGER.info("得到的参数students:"+students);
         return students;
     }
+    /*JSON*/
+    @RequestMapping(value ="/astudent",method = RequestMethod.GET)
+    public String getAStudent(){
+        Student student =studentService.findByOnlineId("11");
+        LOGGER.info("得到的参数student:"+student);
+        return "taglib";
+    }
 
-    /*获得保存学生信息*/
+    /*测试校验*/
     @RequestMapping(value ="/POST/student",method = RequestMethod.GET)
     public ModelAndView saveStudent( ModelAndView mv,@Valid Student student,BindingResult result) {
         if(result.hasErrors()){
@@ -72,7 +82,7 @@ public class TestController {
         return mv;
 
     }
-
+    /*测试校验*/
     @RequestMapping("/getStudent.do")
     @ResponseBody
     public Student getStudent(@Valid Student student,BindingResult result){
@@ -84,5 +94,6 @@ public class TestController {
         }
         return student;
     }
+
 
 }
