@@ -32,7 +32,7 @@
     <junit.version>4.12</junit.version>
     <jackson.version>2.9.8</jackson.version>
     <jsonlib.version>1.0.2</jsonlib.version>
-    <validator.version>6.0.10.Final</validator.version>
+    <validator.version>6.1.0.Final</validator.version>
   </properties>
 
   <dependencies>
